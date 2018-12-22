@@ -1,0 +1,34 @@
+main.m
+
+Purpose: Initializes the rocket, the motor and the environement; declares the end time "tend" and launches the ascent calculation.
+Functions called: init_rocket(), motor_init( rocket ), environement( Elevation(m), Temperature(C), Pressure(Pa), rocket ), accent_calc(DTF,tend)
+Methods called: none
+Called by: user
+
+init_rocket.m
+
+Purpose: Creates rocket properties array from file for class constructor.
+Functions called: none
+Methods called: none
+Called by: main
+
+rocket.m
+
+Purpose: Creates rocket the rocket class. Defines all the properties of the rocket. The dynamics are continuously updated, any varibales need for functions should come from this class
+Functions called: Cd_mandell(obj), Cn_alphaXcp(obj)
+Methods defined: constructor, Cd(obj), CnXcp(obj), T(obj), Re(obj), Mass(obj), Xcm(obj), Ibody(obj)
+Called by: main
+
+motor_init.m
+
+Purpose: Reads the .eng thrust file of the motors and calculates the reletive properties of the motor. 
+Functions called: none
+Methods called: none
+Called by: main
+
+environement.m
+
+Purpose: Defines the environement class containing all environement variables necessary for the ascent calculation.
+Functions called: none
+Methods defined: Constructor, g(obj), Temp(obj), mu(obj), Pressure(obj), rho(obj), C(obj), W(obj)
+Called by: main

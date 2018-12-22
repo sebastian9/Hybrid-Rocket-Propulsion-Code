@@ -1,7 +1,7 @@
 function motor_init( roro )
     %% data from thrustcurve.org
     % Reads the .eng thrust file of the motors and calculates the reletive 
-    % the reletive properties of the motor. 
+    % properties of the motor. 
     
     % Extracting thrust curve
     R1=4;
