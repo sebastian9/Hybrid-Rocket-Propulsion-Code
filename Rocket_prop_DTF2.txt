@@ -1,0 +1,18 @@
+Lenght, 2.79
+Cone Lenght, 0.61
+Diameter, 0.12
+Number of Fins, 3
+Fin height, 8.8e-2
+Fin base length,20e-2
+Fin top length, 8.8e-2
+Fin Sweep angle,45
+Fin thickness, 3.175e-2
+Mass dry, 22.155
+Ixx, 0.1049605
+Iyy, 2.761e+02
+Izz, 2.761e+02
+Xcm dry, 1.433
+Launchpin height, 17e-3
+Launchpin Dia, 30e-3
+Trim mass, 0.0
+Cesaroni_N4100.eng, 0
