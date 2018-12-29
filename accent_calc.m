@@ -52,9 +52,9 @@ function [t, state] = accent_calc( DTF,tend )
         % Angle between velocity vector of the CoP to the roll axis, given in the ground coord
         % To Do : windmodel in env, Model gives errors
         if(norm(X) < DTF.Rail)
-        W = [0, 0, 0]';
+            W = [0, 0, 0]';
         else
-        W = env.W;
+            W = env.W;
         end
         Vcm = Xdot + W;
         Xstab = Xcp- DTF.Xcm;
@@ -106,7 +106,7 @@ function [t, state] = accent_calc( DTF,tend )
         state_dot =[Xdot; Qdot; Ftot;Trq];
         %% -------Burnout time-------
         if(DTF.propM_current<0.01 && DTF.t_Burnout == 0 )
-        DTF.t_Burnout = t;
+            DTF.t_Burnout = t;
         end
         %% Log Data
         %logData(DTF.alpha, DTF.Cd, Cda, DTF.Xcm, DTF.Mass, Vmag, Xcp, zeta, Ssm, t);

@@ -1,4 +1,4 @@
-function a = extract_data ( state,t)
+function a = extract_data(state,t)
 % Function run the states through the model again to extract the needed
 % internal parameters. This has to be done becasue ode45 does not allow for
 % the extraction of internal parameters

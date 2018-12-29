@@ -1,15 +1,13 @@
 main.m
 
 Purpose: Initializes the rocket, the motor and the environement; declares the end time "tend" and launches the ascent calculation.
-Functions called: init_rocket(), motor_init( rocket ), environement( Elevation(m), Temperature(C), Pressure(Pa), rocket ), accent_calc(DTF,tend)
-Methods called: none
+Functions called: init_rocket(), motor_init( rocket ), environement( Elevation(m), Temperature(C), Pressure(Pa), rocket ), accent_calc(DTF,tend), extract_data(state, t)
 Called by: user
 
 init_rocket.m
 
 Purpose: Creates rocket properties array from file for class constructor.
 Functions called: none
-Methods called: none
 Called by: main
 
 rocket.m
@@ -23,7 +21,6 @@ motor_init.m
 
 Purpose: Reads the .eng thrust file of the motors and calculates the reletive properties of the motor. 
 Functions called: none
-Methods called: none
 Called by: main
 
 environement.m
@@ -35,14 +32,47 @@ Called by: main
 
 Cn_alphaXcp.m
 
-Purpose: Untidy implementation of the Barrowman Equations. Calculates Cn, Xcp, Cda (coefficient of damping), zeta (damping ratio), Ssm (static stability margin). Ultimately used in accent_calc through the rocket class.
-Functions called: none (?)
-Methods called: none (?)
+Purpose: Untidy implementation of the Barrowman Equations according to Open Rocket. Calculates Cn, Xcp, Cda (coefficient of damping), zeta (damping ratio), Ssm (static stability margin). Ultimately used in accent_calc through the rocket class.
+Functions called: Xcp_Barrowman_f(rocket)
 Called by: rocket
 
-Cd_mandell
+Cd_mandell.m
 
 Purpose: Untidy implementation of the Mandell Equations. Calculates total drag coefficient.
 Functions called: none (?)
-Methods called: none (?)
 Called by: rocket
+
+extract_data.m
+
+Purpose: Extremely inefficient data logging, not necessary for each calculation.
+Functions called: logData(alpha, Cd, Cda, Xcm, Mass, Vmag, Xcp, zeta, Ssm, Ssm_B, Ccm, t)
+Called by: main
+
+logData.m
+
+Purpose: Single lined function used only once for adding extracted data to log global variable.
+Functions called: none
+Called by: extract_data
+
+normalize.m
+
+Purpose: Normalize a Vector.
+Functions called: none
+Called by: accent_calc
+
+accent_calc.m
+
+Purpose: Solve the differential equations for the trajectory of the rocket.
+Functions called: normalize(vector), 
+Called by: main.m
+
+Xcp_Barrowman_f.m
+
+Purpose: Calculate Xcp according to Barrowman for documentation
+Functions called: none (?) 
+Called by: Cn_alphaXcp
+
+plotData.m
+Purpose: Plots flight and stability results.
+Functions called: none (?)
+Called by: user

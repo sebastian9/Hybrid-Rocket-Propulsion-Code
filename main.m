@@ -28,12 +28,12 @@ zlabel('Height (m)')
 axis([-500 500 -500 500 0 800])
 h_max=max(state(:,3))
 %%
-extract_data ( state,t);
+extract_data(state,t);
 %% Debugging plots
 % figure(3)
 %
 % plot(log(:,10),log(:,2))
-%
+% 
 % xlabel('Time')
 % ylabel('Value1, Value2')
 % %axis([0 20 0.0 1])
