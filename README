@@ -32,3 +32,17 @@ Purpose: Defines the environement class containing all environement variables ne
 Functions called: none
 Methods defined: Constructor, g(obj), Temp(obj), mu(obj), Pressure(obj), rho(obj), C(obj), W(obj)
 Called by: main
+
+Cn_alphaXcp.m
+
+Purpose: Untidy implementation of the Barrowman Equations. Calculates Cn, Xcp, Cda (coefficient of damping), zeta (damping ratio), Ssm (static stability margin). Ultimately used in accent_calc through the rocket class.
+Functions called: none (?)
+Methods called: none (?)
+Called by: rocket
+
+Cd_mandell
+
+Purpose: Untidy implementation of the Mandell Equations. Calculates total drag coefficient.
+Functions called: none (?)
+Methods called: none (?)
+Called by: rocket

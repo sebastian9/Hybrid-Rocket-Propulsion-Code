@@ -114,9 +114,9 @@ function [t, state] = accent_calc( DTF,tend )
     function [value,isterminal,direction] = event_function(t,state)
         %% stops ode integration when the max height is reached
         if (t > 1 && state(10) <= 0) % Linear momentum in z direction is zero
-        value = 0; % when value = 0, an event is triggered
+            value = 0; % when value = 0, an event is triggered
         else
-        value =1;
+            value =1;
         end
         isterminal = 1; % terminate after the first event
         direction = 0; % get all the zeros
