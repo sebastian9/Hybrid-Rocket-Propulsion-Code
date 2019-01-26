@@ -1,0 +1,16 @@
+Reference: [1] B. Geneviève, M. J. Brooks, J.-F. P. Pitot De La Beaujardiere, and L. W. Roberts, “Performance Modeling of a Paraffin Wax / Nitrous Oxide Hybrid Rocket Motor,” AIAA Member. 3 Lect. Sch. Mech. Eng., p. 4041, 2011.
+           [2] Fernandez, M. M., “Propellant Tank Pressurization Modeling for a Hybrid Rocket,” Masters Thesis, Department of Mechanical Engineering, Rochester Institute of Technology, NY, 2009.
+
+Objective: Design & Predict motor performance under different operating specifications and conditions.
+
+The program uses the performance module to iteratively create a design.
+
+The program evaluates the state of the system unidimensionally through 3 control volumes:
+    CV1: Discharging process of the oxydizer tank, driven by the pressure difference 
+        between the oxidyzer tank and the combustion chamber.
+        System of 3 first-order ODEs.
+    CV2: Modeling of the combustion, driven from the regression rate of the fuel grain,
+        and the change in propellant's termochemestry
+    CV3: Mass flow rate of the combustion products, nozzle.
+
+  
