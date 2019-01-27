@@ -27,20 +27,24 @@
 \end{center}
 
 \[
-	\frac{dn_{ox,v}}{dt} + \frac{dn_{ox,l}}{dt} = -C_{d}N_{inj}A_{inj}\sqrt{\frac{2(P_{T}-P_{losses}-P_{C})}{(MW)_{ox}\overline{V}_{ox,l}}}
+	\dot{n}_{ox,v} + \dot{n}_{ox,l} = -C_{d}N_{inj}A_{inj}\sqrt{\frac{2(P_{T}-P_{losses}-P_{C})}{(MW)_{ox}\overline{V}_{ox,l}}}
 \]\\
 
 \[
-	-\overline{V}_{ox,l} P^{*}_{ox} \frac{dn_{ox,l}}{dt} + \left[ [V_{T}-n_{ox,l}\overline{V}_{ox,l}] \frac{dP^{*}_{ox}}{dT} -n_{ox,l} P^{*}_{ox} \frac{d\overline{V}_{ox,l}}{dT} \right] \frac{dT_{T}}{dt} = R_{u} \left[ n_{ox,v} \frac{dT_{T}}{dt} + T_{T} \frac{n_{ox,v}}{dt} \right]
+	-\overline{V}_{ox,l} P_{cr,ox} \dot{n}_{ox,l} + \left( \left(V_{T}-n_{ox,l}\overline{V}_{ox,l}\right) \left( \frac{P_{cr,ox}}{dT} \right) -n_{ox,l} P_{cr,ox} \left( \frac{\overline{V}_{ox,l}}{dT} \right) \right) \dot{T}_{T} = R_{u} \left( n_{ox,v} \dot{T}_{T} + T_{T} \dot{n}_{ox,v} \right)
 \]\\
 
 \[
-	[m_{T}c_{P_{T}} + n_{ox,l}\overline{C}_{P_{ox,l}} + n_{ox,v}\overline{C}_{V_{ox,v}} + n_{sp,v}\overline{C}_{V_{sp,v}}]\frac{dT_{T}}{dt} = \frac{dn_{ox,v}}{dt} [R_{u}T_{T} - \Delta\overline{H}_{ox,v}] + \frac{dn_{ox,l}}{dt}[P_{T}\overline{V}_{ox,l}]
+	(m_{T}c_{P_{T}} + n_{ox,l}\overline{C}_{P_{ox,l}} + n_{ox,v}\overline{C}_{V_{ox,v}} + n_{sp,v}\overline{C}_{V_{sp,v}})\dot{T}_{T} = \dot{n}_{ox,v} (R_{u}T_{T} - \Delta\overline{H}_{ox,v}) + \dot{n}_{ox,l}(P_{T}\overline{V}_{ox,l})
 \]\\
 
 The unknowns are $\dot{n}_{ox,l}$, $\dot{n}_{ox,v}$ and $\dot{T}_{T}$
 
 And so we proceed to solve the equations to isolate each of the unknowns:
+
+\[
+	\dot{n}_{ox,v} = \frac{\sqrt{2} A_{\text{inj}} C_d N_{\text{inj}} \sqrt{-\frac{P_C+P_{\text{losses}}-P_T}{\text{MW}_{\text{ox}} \bar{V}_{\text{ox},l}}} \left(\bar{V}_{\text{ox},l} \left(P_{\text{cr},\text{ox}} \left(n_{\text{ox},l} \bar{C}_{P_{\text{ox},l}}+n_{\text{ox},v} \bar{C}_{V_{\text{ox},v}}+n_{\text{sp},v} \bar{C}_{V_{\text{sp},v}}+m_T c_{P_T}\right)-\Delta  n_{\text{ox},l} \bar{H}_{\text{ox},v} P_{\text{cr},\text{ox},\text{dT}}\right)+R_u \left(T_T \left(P_{\text{cr},\text{ox},\text{dT}} \left(n_{\text{ox},l} \bar{V}_{\text{ox},l}-V_T\right)+P_{\text{cr},\text{ox}} n_{\text{ox},l} \bar{V}_{\text{ox},l,\text{dT}}\right)-\Delta  n_{\text{ox},v} \bar{H}_{\text{ox},v}\right)-\Delta  P_{\text{cr},\text{ox}} n_{\text{ox},l} \bar{H}_{\text{ox},v} \bar{V}_{\text{ox},l,\text{dT}}+\Delta  V_T \bar{H}_{\text{ox},v} P_{\text{cr},\text{ox},\text{dT}}+T_T R_u^2 n_{\text{ox},v}\right)}{m_T c_{P_T} \left(T_T R_u-P_{\text{cr},\text{ox}} \bar{V}_{\text{ox},l}\right)+R_u \left(T_T \left(n_{\text{ox},l} \left(\bar{C}_{P_{\text{ox},l}}-\bar{V}_{\text{ox},l} P_{\text{cr},\text{ox},\text{dT}}-P_{\text{cr},\text{ox}} \bar{V}_{\text{ox},l,\text{dT}}\right)+n_{\text{ox},v} \bar{C}_{V_{\text{ox},v}}+n_{\text{sp},v} \bar{C}_{V_{\text{sp},v}}+V_T P_{\text{cr},\text{ox},\text{dT}}\right)+n_{\text{ox},v} \left(\Delta  \bar{H}_{\text{ox},v}+P_T \bar{V}_{\text{ox},l}\right)\right)+\bar{V}_{\text{ox},l} \left(P_{\text{cr},\text{ox},\text{dT}} \left(\Delta  n_{\text{ox},l} \bar{H}_{\text{ox},v}+P_T \left(n_{\text{ox},l} \bar{V}_{\text{ox},l}-V_T\right)\right)-P_{\text{cr},\text{ox}} \left(n_{\text{ox},l} \bar{C}_{P_{\text{ox},l}}+n_{\text{ox},v} \bar{C}_{V_{\text{ox},v}}+n_{\text{sp},v} \bar{C}_{V_{\text{sp},v}}\right)\right)+P_{\text{cr},\text{ox}} n_{\text{ox},l} \bar{V}_{\text{ox},l,\text{dT}} \left(\Delta  \bar{H}_{\text{ox},v}+P_T \bar{V}_{\text{ox},l}\right)-\Delta  V_T \bar{H}_{\text{ox},v} P_{\text{cr},\text{ox},\text{dT}}-T_T R_u^2 n_{\text{ox},v}}
+\]\\
 
 
 
