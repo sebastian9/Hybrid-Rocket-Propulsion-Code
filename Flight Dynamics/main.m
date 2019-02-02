@@ -10,7 +10,7 @@ motor_init( DTF ); %loads rocket motor
 %%
 % Initilize Environmental variables
 % optional argument: Elevation(m) Temperature(C)and Pressure(Pa)
-env = environement(350, 15, 86000, DTF );
+env = environement(350, 15, 86000, DTF);
 %% Phase: Accent
 tend=30;
 [t, state] = accent_calc(DTF,tend);
