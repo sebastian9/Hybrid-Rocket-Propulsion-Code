@@ -1,12 +1,13 @@
 %% Motor
 % Defines all the properties of the motor. The dynamics are continuously
 % updated, any varibales need for functions should come from this class
-classdef motor <handle
+classdef Motors <handle
     properties
         A_inj
         C_d_l
         c_P_T
-        D_inj        
+        D_inj
+        env
         m_T
         m_oxt
         m_spv
@@ -17,15 +18,14 @@ classdef motor <handle
         n_oxl
         n_oxv
         n_spv
-        P_losses        
-        R_u
+        P_losses                
         T_crit_ox        
         T_T
         V_T
     end
     methods
         % Constructor takes data from motor property file
-        function obj = motor(motor_file) % Motor file is the motor data
+        function obj = Motors(motor_file,env) % Motor file is the motor data
             if nargin > 0
                 prop = readtable(motor_file,'Format','%s%f');
                 prop = table2array(prop(1:end,2));
@@ -38,30 +38,30 @@ classdef motor <handle
                 obj.MW_spv = prop(7);
                 obj.N_inj = prop(8);
                 obj.P_losses = prop(9);
-                obj.R_u = prop(10);
-                obj.T_crit_ox = prop(11);
-                obj.T_T = prop(12);
-                obj.V_T = prop(13);
+                obj.T_crit_ox = prop(10);
+                obj.V_T = prop(11);
+                obj.T_T = env.T;
+                obj.env = env;
                 % derived properties
                 obj.A_inj = 0.25*pi*obj.D_inj^2;
                 obj.n_oxt = obj.m_oxt/obj.MW_ox;
                 obj.n_spv = obj.m_spv/obj.MW_spv;
-                obj.n_oxl = (obj.n_oxt*obj.R_u*obj.T_T - obj.P_crit_ox(obj.T_T)*obj.V_T) ...
-                    / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O liquid [kmol]
+                obj.n_oxl = (obj.n_oxt*obj.env.R_u*obj.T_T - obj.P_crit_ox(obj.T_T)*obj.V_T) ...
+                    / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.env.R_u*obj.T_T); % initial N2O liquid [kmol]
                 obj.n_oxv = obj.P_crit_ox(obj.T_T)*(obj.V_T - obj.V_mol_oxl(obj.T_T)*obj.n_oxl) ...
-                    / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O gas [kmol]
+                    / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.env.R_u*obj.T_T); % initial N2O gas [kmol]
                 obj.c_P_T = (4.8 + 0.00322*obj.T_T)*155.239; % 'J/(kg-K)' % specific heat of tank, Aluminium
             end
         end
         function [CV] = CV_oxv(obj,T)
             % heat capacity of N2O gas at constant pressure [J/(kmol*K)] coefficients, valid for Temp range [100 K - 1500 K]
             % D1 = 0.2934e5; D2 = 0.3236e5; D3 = 1.1238e3; D4 = 0.2177e5; D5 = 479.4;
-            CV = 0.2934e5 + 0.3236e5*((1.1238e3/T)/sinh(1.1238e3/T))^2 + 0.2177e5*((479.4/T)/cosh(479.4/T))^2 - obj.R_u; 
+            CV = 0.2934e5 + 0.3236e5*((1.1238e3/T)/sinh(1.1238e3/T))^2 + 0.2177e5*((479.4/T)/cosh(479.4/T))^2 - obj.env.R_u; 
         end
         function [CV] = CV_spv(obj,T)
             % heat capacity of He at constant pressure [J/(kmol*K)] coefficients, valid for Temp range [100 K - 1500 K]
             %C1 = 0.2079e5; C2 = 0; C3 = 0; C4 = 0; C5 = 0;
-            CV = 0.2079e5 + 0*T + 0*T^2 + 0*T^3 + 0*T^4 - obj.R_u; %specific heat of He at constant volume [J/(kmol*K)]
+            CV = 0.2079e5 + 0*T + 0*T^2 + 0*T^3 + 0*T^4 - obj.env.R_u; %specific heat of He at constant volume [J/(kmol*K)]
         end
         function [H] = deltaH_oxv(obj,T)
             % heat of vaporization of N2O [J/kmol] coefficients, valid for Temp range [182.3 - 309.57 K]

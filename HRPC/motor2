@@ -7,7 +7,5 @@ MW_ox, 44.013
 MW_spv, 4
 N_inj, 1
 P_losses, 0
-R_u, 8314.3
 T_crit_ox, 309.57
-T_T, 286.5
 V_T, 0.0354
