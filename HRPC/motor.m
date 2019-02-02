@@ -46,10 +46,22 @@ classdef motor <handle
                 obj.A_inj = 0.25*pi*obj.D_inj^2;
                 obj.n_oxt = obj.m_oxt/obj.MW_ox;
                 obj.n_spv = obj.m_spv/obj.MW_spv;
-                obj.n_oxl = (obj.n_oxt*obj.R_u*obj.T_T - obj.P_crit_ox(obj.T_T)*obj.V_T) / (-obj.P_crit_ox(obj.T_T)*V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O liquid [kmol]
-                obj.n_oxv = obj.P_crit_ox(obj.T_T)*(obj.V_T - V_mol_oxl(obj.T_T)*obj.n_oxl) / (-obj.P_crit_ox(obj.T_T)*V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O gas [kmol]
+                obj.n_oxl = (obj.n_oxt*obj.R_u*obj.T_T - obj.P_crit_ox(obj.T_T)*obj.V_T) / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O liquid [kmol]
+                obj.n_oxv = obj.P_crit_ox(obj.T_T)*(obj.V_T - obj.V_mol_oxl(obj.T_T)*obj.n_oxl) / (-obj.P_crit_ox(obj.T_T)*obj.V_mol_oxl(obj.T_T) + obj.R_u*obj.T_T); % initial N2O gas [kmol]
                 obj.c_P_T = (4.8 + 0.00322*obj.T_T)*155.239; % 'J/(kg-K)' % specific heat of tank, Aluminium
             end
+        end
+        function [CV] = CV_oxv(obj,T)
+            % heat capacity of N2O gas at constant pressure [J/(kmol*K)] coefficients
+            % valid for Temp range [100 K - 1500 K]
+            D1 = 0.2934e5; D2 = 0.3236e5; D3 = 1.1238e3; D4 = 0.2177e5; D5 = 479.4;
+            %specific heat of N2O gas at constant volume [J/(kmol*K)]
+            CV = D1 + D2*((D3/T)/sinh(D3/T))^2 + D4*((D5/T)/cosh(D5/T))^2 - obj.R_u; 
+        end
+        function [CV] = CV_spv(obj,T)
+            % heat capacity of He at constant pressure [J/(kmol*K)] coefficients, valid for Temp range [100 K - 1500 K]
+            C1 = 0.2079e5; C2 = 0; C3 = 0; C4 = 0; C5 = 0;
+            CV = C1 + C2*T + C3*T^2 + C4*T^3 + C5*T^4 - obj.R_u; %specific heat of He at constant volume [J/(kmol*K)]
         end
     end
     methods (Static)
@@ -58,18 +70,6 @@ classdef motor <handle
             E1 = 6.7556e4; E2 = 5.4373e1; E3 = 0; E4 = 0; E5 = 0;
             % specific heat of N2O liquid at constant volume, approx. same as at constant pressure [J/(kmol*K)]
             CV = E1 + E2*T + E3*T^2 + E4*T^3 + E5*T^4;
-        end
-        function [CV] = CV_oxv(T)
-            % heat capacity of N2O gas at constant pressure [J/(kmol*K)] coefficients
-            % valid for Temp range [100 K - 1500 K]
-            D1 = 0.2934e5; D2 = 0.3236e5; D3 = 1.1238e3; D4 = 0.2177e5; D5 = 479.4;
-            %specific heat of N2O gas at constant volume [J/(kmol*K)]
-            CV = D1 + D2*((D3/T)/sinh(D3/T))^2 + D4*((D5/T)/cosh(D5/T))^2 - R; 
-        end
-        function [CV] = CV_spv(T)
-            % heat capacity of He at constant pressure [J/(kmol*K)] coefficients, valid for Temp range [100 K - 1500 K]
-            C1 = 0.2079e5; C2 = 0; C3 = 0; C4 = 0; C5 = 0;
-            CV = C1 + C2*T + C3*T^2 + C4*T^3 + C5*T^4 - R; %specific heat of He at constant volume [J/(kmol*K)]
         end
         function [H] = deltaH_oxv(T)
             obj.T_crit_ox = 309.57; % 'K'
@@ -95,6 +95,11 @@ classdef motor <handle
             % molar specific volume of liquid N2O [m^3/kmol] coefficients
             Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
             V = Q2^(1+(1-T/Q3)^Q4)/Q1;
+        end
+        function [dVdT] = dV_mol_oxl_dT(T)
+            % molar specific volume of liquid N2O [m^3/kmol] coefficients
+            Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
+            dVdT = -(Q2^((1 - T/Q3)^Q4 + 1)*Q4*log(Q2)*(1 - T/Q3)^(Q4 - 1))/(Q1*Q3);
         end
     end
 end

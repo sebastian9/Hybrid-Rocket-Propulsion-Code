@@ -1,33 +1,4 @@
-% Consideradas: A_inj C_d c_P_T CP_oxl CV_oxv CV_spv m_T MW_ox N_inj
-% dP_crit_ox(T_T)_dT P_crit_ox(T_T) P_losses R_u T_T deltaH_oxv(T_T)
-% No consideradas: n_oxv n_oxl n_spv P_T P_CV_T V_mol_oxl dV_mol_oxl_dT
 clear
-
-% %% Primal Variables
-% 
-% C_d_l = 0.8;
-% % C_d_g = 0.5;
-% C_d = C_d_l; 
-% D_inj = 0.002; %m
-% P_losses = 5; % bar
-% N_inj = 17;
-% m_T = 6.4882; % 'kg'
-% m_oxt = 30; % 'kg'
-% m_spv = 0.004; % 'kg'
-% MW_ox = 44.013; % 'kg/kmol'
-% MW_spv = 4; % 'kg/kmol'
-% R_u = 8314.3; % 'J/kmol-K'
-% T_T = 298; % 'K'
-% T_crit_ox = 309.57; % 'K' % critical temperature of N2O
-% V_T = 0.043; % 'm^3'
-% 
-% %% Derived Variables
-% 
-% A_inj = 0.25*pi*D_inj^2;
-% n_oxt = m_oxt/MW_ox;
-% n_spv = m_spv/MW_spv;
-% n_oxl = (n_oxt*R_u*T_T - P_crit_ox(T_T)*V_T) / (-P_crit_ox(T_T)*V_mol_oxl + R_u*T_T); % initial N2O liquid [kmol]
-% n_oxv = P_crit_ox(T_T)*(V_T - V_mol_oxl*n_oxl) / (-P_crit_ox(T_T)*V_mol_oxl + R_u*T_T); % initial N2O gas [kmol]
 
 motor1 = motor('motor1');
 
@@ -51,10 +22,12 @@ function state_dot = CV1_function(t,state,mi)  % mi = motor_instance
     V_mol_oxl = mi.V_mol_oxl(T_T);
     P_crit_ox = mi.P_crit_ox(T_T);
     dP_crit_ox_dT = mi.dP_crit_ox_dT(T_T);
+    dV_mol_oxl_dT = mi.dV_mol_oxl_dT(T_T);
     CV_oxv = mi.CV_oxv(T_T);
     CV_spv = mi.CV_spv(T_T);
 
-    C_d = mi.C_d;
+    C_d = mi.C_d_l;
+    c_P_T = mi.c_P_T;
     P_losses = mi.P_losses;
     N_inj = mi.N_inj;
     m_T = mi.m_T;
