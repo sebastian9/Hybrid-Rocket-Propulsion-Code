@@ -1,13 +1,13 @@
 C_d_l, 0.8
 D_inj, 0.002
-P_losses, 5
-N_inj, 17
-m_T, 6.4882
 m_oxt, 30
 m_spv, 0.004
+m_T, 6.4882
 MW_ox, 44.013
 MW_spv, 4
+N_inj, 17
+P_losses, 5
 R_u, 8314.3
-T_T, 298
 T_crit_ox, 309.57
+T_T, 298
 V_T, 0.043

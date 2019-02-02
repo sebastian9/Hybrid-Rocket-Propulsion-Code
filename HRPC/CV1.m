@@ -5,14 +5,28 @@ motor1 = motor('motor1');
 %% State function initial condition and solution
 
 state_0 = [motor1.n_oxv,motor1.n_oxl,motor1.T_T]; % kmol/s, kmol/s, K
-tspan = 0:0.0005:5; % s
+tspan = 0:0.0005:15; % s
 
-[t,state] = ode45(@(t,state) CV1_function(t,state,motor1),tspan,state_0);
+opts    = odeset('Events', @stopEvent);
+[t,state] = ode45(@(t,state) CV1_function(t,state,motor1),tspan,state_0, opts);
+
+% Plot results 
+figure(1), plot(t(:),state(:,3),'r','LineWidth',2),grid, ... 
+    title('Temperature vs. Time'),... 
+    xlabel('Time [s]'),... 
+    ylabel('Temperature [K]');
+figure(2), plot(t(:),state(:,1),'b',t(:),state(:,2),'g','LineWidth',2),grid, ... 
+    title('kmol of N20 vs. Time'),... 
+    xlabel('Time [s]'),... 
+    ylabel('kmol of N2O [kmol]'),... 
+    legend('kmol of N2O gas','kmol of N2O liquid');
 
 %% State function definition
 function state_dot = CV1_function(t,state,mi)  % mi = motor_instance
     
-    P_C = 5; % bar
+    % Curve fitted combustion chamber pressure [Pa]: 
+    P_C = -2924.42*t^6 + 46778.07*t^5 - 285170.63*t^4 + 813545.02*t^3 - ... 
+        1050701.53*t^2 + 400465.85*t + 1175466.2;
 
     n_oxv = state(1);
     n_oxl = state(2);
@@ -53,4 +67,10 @@ function state_dot = CV1_function(t,state,mi)  % mi = motor_instance
     V = [ f1; 0; 0 ];
 
     state_dot = linsolve(M,V);
+end
+
+function [value, isterminal, direction] = stopEvent(t, state)
+    value      = (state(2) <= 0)-0.5;
+    isterminal = 1;   % Stop the integration
+    direction  = 0;
 end
