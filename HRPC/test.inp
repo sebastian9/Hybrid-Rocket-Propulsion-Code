@@ -1,0 +1,11 @@
+ prob ro equilibrium 
+
+  ! iac problem 
+ o/f 63965.354962 
+ p,atm = 2.184896 
+ pip 2.184918 
+ reac 
+   fuel  C32H66(a) wt%=100 t,k=298.15 
+   oxid  N2O wt%=100.  t,k=298.15 
+ output trace=1e-51 
+ end 

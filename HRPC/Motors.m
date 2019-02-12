@@ -8,6 +8,7 @@ classdef Motors <handle
         c_P_T
         D_inj
         env
+        L_g
         m_T
         m_oxt
         m_spv
@@ -18,7 +19,11 @@ classdef Motors <handle
         n_oxl
         n_oxv
         n_spv
-        P_losses                
+        P_losses
+        P_C
+        R_p
+        R_p_f
+        rho_f
         T_crit_ox        
         T_T
         V_T
@@ -40,6 +45,11 @@ classdef Motors <handle
                 obj.P_losses = prop(9);
                 obj.T_crit_ox = prop(10);
                 obj.V_T = prop(11);
+                obj.R_p = prop(12);
+                obj.R_p_f = prop(13);
+                obj.L_g = prop(14);
+                obj.rho_f = prop(15);
+                obj.P_C = env.P;
                 obj.T_T = env.T;
                 obj.env = env;
                 % derived properties
@@ -69,6 +79,45 @@ classdef Motors <handle
             Tr = T/obj.T_crit_ox;
             H = 2.3215e7*(1 - Tr) ^ (0.384 + 0*Tr + 0*Tr^2);
         end
+        function [R_p_dot] = R_p_dot(obj,m_dot_ox)
+           a = 0.132e-3; n = 0.555; % Genevieve (2013) table 3.1
+           R_p_dot = a*(m_dot_ox/(pi*obj.R_p^2))^n;
+        end
+        function [T_C, CP_C, k_C] = NASACEA(obj, OF, P_C)
+            fid = fopen ('test.inp', 'w');
+            fprintf (fid, ' prob ro equilibrium \n\n');
+            fprintf (fid, '  ! iac problem \n');
+            fprintf (fid, ' o/f %f \n', OF);
+            fprintf (fid, ' p,atm = %f \n', P_C/101325);
+            fprintf (fid, ' pip %f \n', 1.00001*P_C/obj.env.P);
+            fprintf (fid, ' reac \n');
+            fprintf (fid, '   fuel  C32H66(a) wt%%=100 t,k=298.15 \n');
+            fprintf (fid, '   oxid  N2O wt%%=100.  t,k=298.15 \n');
+            fprintf (fid, ' output trace=1e-51 \n');
+            fprintf (fid, ' end \n');
+            fclose(fid);
+
+            f = fopen('temp', 'w');
+            fprintf (f, 'test\n');
+            fclose (f);
+
+            dos('FCEA2.exe < temp');
+
+            text = fileread('test.out');
+            text = extractAfter(text,strfind(text,'T, K')+16);
+            text = extractBefore(text,8);
+            T_C = str2double(text);
+            text = fileread('test.out');
+            text = extractAfter(text,strfind(text,'Cp, KJ/(KG)(K)')+17);
+            text = extractBefore(text,7);
+            CP_C = str2double(text);
+            text = fileread('test.out');
+            text = extractAfter(text,strfind(text,'GAMMAs')+17);
+            text = extractBefore(text,7);
+            k_C = str2double(text);
+            
+%             delete test.inp test.out temp
+        end
     end
     methods (Static)
         function [CV] = CV_oxl(T) 
@@ -96,5 +145,11 @@ classdef Motors <handle
             % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
             dVdT = -(0.27244^((1 - T/309.57)^0.2882 + 1)*0.2882*log(0.27244)*(1 - T/309.57)^(0.2882 - 1))/(2.781*309.57);
         end
+%         function M = mi.MassRate(M_dot,M_ox_C,M_f_C,m_dot_ox,m_dot_f,m_dot_n)
+%             % mass function
+%             deltat = 0.005;
+%             M(1) = M_dot(1) - m_dot_ox + m_dot_n / ( 1 + (M_f_C + M_dot(2)*deltat)/(M_ox_C + M_dot(1)*deltat));
+%             M(2) = M_dot(2) - m_dot_f + m_dot_n / ( 1 + (M_ox_C + M_dot(1)*deltat)/(M_f_C + M_dot(2)*deltat));
+%         end
     end
 end

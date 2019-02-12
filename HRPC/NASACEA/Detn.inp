@@ -1,0 +1,11 @@
+ prob ro equilibrium 
+
+  ! iac problem 
+ o/f 6.750000 
+ p,atm = 50.000000 
+ pip 100.000000 
+ reac 
+   fuel  CH4 wt%=100 t,k=298.15 
+   oxid  N2O wt%=100.  t,k=298.15 
+ output trace=1e-51 
+ end 

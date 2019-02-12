@@ -9,3 +9,7 @@ N_inj, 17
 P_losses, 5
 T_crit_ox, 309.57
 V_T, 0.043
+R_p, 0.025
+R_p_f, 0.08
+L_g, 0.5
+Rho_f, 900

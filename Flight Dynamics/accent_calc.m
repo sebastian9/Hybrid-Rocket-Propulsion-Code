@@ -3,7 +3,7 @@ function [t, state] = accent_calc( DTF,tend )
     global env;
     global log;
     state_0 = [DTF.X; DTF.Q; DTF.P; DTF.L];
-    tspan = [0:0.005:tend];
+    tspan = [0:tend];
     % Event function to stop at max height
     options = odeset('Events',@event_function);
     % Solve flight using ODE45
@@ -109,7 +109,7 @@ function [t, state] = accent_calc( DTF,tend )
             DTF.t_Burnout = t;
         end
         %% Log Data
-        %logData(DTF.alpha, DTF.Cd, Cda, DTF.Xcm, DTF.Mass, Vmag, Xcp, zeta, Ssm, t);
+        logData(DTF.alpha, DTF.Cd, Cda, DTF.Xcm, DTF.Mass, Vmag, Xcp, zeta, Ssm, t);
     end
     function [value,isterminal,direction] = event_function(t,state)
         %% stops ode integration when the max height is reached
