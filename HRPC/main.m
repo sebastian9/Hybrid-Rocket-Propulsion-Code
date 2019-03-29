@@ -1,11 +1,11 @@
 clear
 
-env = Environments(101325,298,'motor2'); % Pa % K % motorfile
+env = Environments(101325,286.5,'motor2'); % Pa % K % motorfile
 
 %% State function initial condition and solution
 
-state_0 = [env.Motor.n_oxv, env.Motor.n_oxl, env.Motor.T_T, env.Motor.R_p, env.Motor.P_C]; % kmol/s, kmol/s, K
-%state_0 = [env.Motor.n_oxv,env.Motor.n_oxl,env.Motor.T_T];
+% state_0 = [env.Motor.n_oxv, env.Motor.n_oxl, env.Motor.T_T, env.Motor.R_p, env.Motor.P_C]; % kmol/s, kmol/s, K
+state_0 = [env.Motor.n_oxv,env.Motor.n_oxl,env.Motor.T_T, env.Motor.R_p];
 tspan = 0:0.05:15; % s
 
 opts    = odeset('Events', @stopEvent);
@@ -25,10 +25,10 @@ figure(3), plot(t(:),state(:,4),'r','LineWidth',2),grid, ...
     title('Port Radius vs. Time'),... 
     xlabel('Time [s]'),... 
     ylabel('Radius [m]');
-figure(4), plot(t(:),state(:,5),'b','LineWidth',2),grid, ... 
-    title('Chamber Pressure vs. Time'),... 
-    xlabel('Time [s]'),... 
-    ylabel('Pressure [Pa]');
+% figure(4), plot(t(:),state(:,5),'b','LineWidth',2),grid, ... 
+%     title('Chamber Pressure vs. Time'),... 
+%     xlabel('Time [s]'),... 
+%     ylabel('Pressure [Pa]');
 
 
 %% Stop integration event
