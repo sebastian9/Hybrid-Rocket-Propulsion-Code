@@ -79,11 +79,7 @@ classdef Motors <handle
             Tr = T/obj.T_crit_ox;
             H = 2.3215e7*(1 - Tr) ^ (0.384 + 0*Tr + 0*Tr^2);
         end
-        function [R_p_dot] = R_p_dot(obj,m_dot_ox)
-           a = 0.132e-3; n = 0.555; % Genevieve (2013) table 3.1
-           R_p_dot = a*(m_dot_ox/(pi*obj.R_p^2))^n;
-        end
-        function [T_C, CP_C, k_C] = NASACEA(obj, OF, P_C)
+        function [T_C, CP_C, k_C] = NASACEA(obj, OF, P_C) % Combustion values
             fid = fopen ('test.inp', 'w');
             fprintf (fid, ' prob ro equilibrium \n\n');
             fprintf (fid, '  ! iac problem \n');
@@ -106,50 +102,52 @@ classdef Motors <handle
             text = fileread('test.out');
             text = extractAfter(text,strfind(text,'T, K')+16);
             text = extractBefore(text,8);
-            T_C = str2double(text);
+            T_C = str2double(text); % K
             text = fileread('test.out');
             text = extractAfter(text,strfind(text,'Cp, KJ/(KG)(K)')+17);
             text = extractBefore(text,7);
-            CP_C = str2double(text);
+            CP_C = str2double(text); % kJ
             text = fileread('test.out');
             text = extractAfter(text,strfind(text,'GAMMAs')+17);
             text = extractBefore(text,7);
-            k_C = str2double(text);
+            k_C = str2double(text); % [-]
             
-%             delete test.inp test.out temp
+            delete test.inp test.out temp
         end
     end
     methods (Static)
-        function [CV] = CV_oxl(T) 
-            % heat capacity of N2O liquid at constant pressure [J/(kmol*K) coefficients, valid for Temp range [182.3 K - 200 K]
-            %E1 = 6.7556e4; E2 = 5.4373e1; E3 = 0; E4 = 0; E5 = 0;
+        function [CV] = CV_oxl(T) % heat capacity of N2O liquid at constant pressure [J/(kmol*K)]
+            % coefficients, valid for Temp range [182.3 K - 200 K]
+            % E1 = 6.7556e4; E2 = 5.4373e1; E3 = 0; E4 = 0; E5 = 0;
             % specific heat of N2O liquid at constant volume, approx. same as at constant pressure [J/(kmol*K)]
             CV = 6.7556e4 + 5.4373e1*T + 0*T^2 + 0*T^3 + 0*T^4;
         end
-        function [dPdT] = dP_crit_ox_dT(T)
-            % vapor pressure of N2O [Pa] coefficients valid for Temp range [182.3 K - 309.57 K]
+        function [dPdT] = dP_crit_ox_dT(T) % derivative of vapor pressure with respect to temperature of N2O [Pa/K]
+            % coefficients valid for Temp range [182.3 K - 309.57 K]
             % G1 = 96.512; G2 = -4045; G3 = -12.277; G4 = 2.886e-5; G5 = 2;
             % derivative of vapor pressure with respect T temperature
             dPdT = (--4045/(T^2) + -12.277/T + 2.886e-5*2*T^(2-1)) * exp(96.512 + -4045/T + -12.277*log(T) + 2.886e-5*T^2);
         end
-        function [P] = P_crit_ox(T)
-            % vapor pressure of N2O [Pa] coefficients valid for Temp range [182.3 K - 309.57 K]
+        function [P] = P_crit_ox(T) % vapor pressure of N2O [Pa]
+            % coefficients valid for Temp range [182.3 K - 309.57 K]
             % G1 = 96.512; G2 = -4045; G3 = -12.277; G4 = 2.886e-5; G5 = 2;
             P = exp(96.512 + -4045/T + -12.277*log(T) + 2.886e-5*T^2);
         end
-        function [V] = V_mol_oxl(T)
-            % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
-            V = 0.27244^(1+(1-T/309.57)^0.2882)/2.781;
+        function [V] = V_mol_oxl(T) % molar specific volume of liquid N2O [m^3/kmol]
+            % coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
+            if isscalar(T)
+                V = 0.27244^(1+(1-T/309.57)^0.2882)/2.781;
+            else
+                V = 0.27244.^(1+(1-T./309.57).^0.2882)./2.781;
+            end
         end
-        function [dVdT] = dV_mol_oxl_dT(T)
-            % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
+        function [dVdT] = dV_mol_oxl_dT(T) % derivative of molar specific volume of liquid N2O with respect to Temperature [m^3/(kmol*K)]
+            % coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
             dVdT = -(0.27244^((1 - T/309.57)^0.2882 + 1)*0.2882*log(0.27244)*(1 - T/309.57)^(0.2882 - 1))/(2.781*309.57);
         end
-%         function M = mi.MassRate(M_dot,M_ox_C,M_f_C,m_dot_ox,m_dot_f,m_dot_n)
-%             % mass function
-%             deltat = 0.005;
-%             M(1) = M_dot(1) - m_dot_ox + m_dot_n / ( 1 + (M_f_C + M_dot(2)*deltat)/(M_ox_C + M_dot(1)*deltat));
-%             M(2) = M_dot(2) - m_dot_f + m_dot_n / ( 1 + (M_ox_C + M_dot(1)*deltat)/(M_f_C + M_dot(2)*deltat));
-%         end
+        function [R_p_dot] = R_p_dot(m_dot_ox,R_p) % Fuel Regression Rate
+           a = 0.132e-3; n = 0.555; % Genevieve (2013) table 3.1
+           R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
+        end
     end
 end
