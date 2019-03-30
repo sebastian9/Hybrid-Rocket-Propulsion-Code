@@ -4,15 +4,14 @@ function state_dot = HRPC_function(t,state,env)
     n_oxv = state(1);
     n_oxl = state(2);
     T_T = state(3);
-%     % Curve fitted combustion chamber pressure [Pa]: 
-    P_C = -2924.42*t^6 + 46778.07*t^5 - 285170.63*t^4 + 813545.02*t^3 - ... 
-       1050701.53*t^2 + 400465.85*t + 1175466.2;
-%     R_p = state(4); % m 
-%     P_C = state(5); % Pa
-%     M_ox_C = state(6);
-%     M_f_C = state(7);
+    R_p = state(4);
+    rho_C = state(5);
+    P_C = state(6);
+    T_C = state(7);
    
     mi = env.Motor; % mi = motor_instance
+
+    %% Oxidizer Tank %%
     
     CP_oxl = mi.CV_oxl(T_T); % approximation from Fernandez
     
@@ -36,24 +35,33 @@ function state_dot = HRPC_function(t,state,env)
     
     state_dot(1:3,1) = linsolve(M,V);  % Isolated derivatives
     
+    %% Control Volume 2
+
     n_oxv_dot = state_dot(1);
     n_oxl_dot = state_dot(2);
-    
+
     m_dot_ox = -(n_oxl_dot - n_oxv_dot)*mi.MW_ox;
     m_dot_f = mi.R_p_dot(m_dot_ox)*(mi.L_g*pi*2*mi.R_p)*mi.rho_f;
-%     OF = m_dot_ox/m_dot_f; % plain wrong
     
+    V_C = 2*pi*R_p^2*mi.L_g;
+    V_C_dot = 2*pi*R_p*mi.L_g*mi.R_p_dot(m_dot_ox);
+
+    rho_ox_C = P_C/(env.R_u/T_C)
+    V_ox_C = V_C*((rho-mi.rho_f)/(rho_ox_C-rho_f));
+    V_f_C = V_C - V_ox_C;
+    OF = (rho_ox_C*V_ox_C)/(mi.rho_f*V_f_C);
+     
+    [Q, k_C] = mi.NASACEA(OF);
+    lambda = sqrt(k*(2/(k_C+1))^((k_C+1)/(k_C-1)));
+    m_dot_nz = lambda*mi.A_t*sqrt(P_C*rho_C);
+    rho_C_dot = (m_dot_ox/V_C) + (mi.rho_f-rho_c)*(V_C_dot/V_C) ...
+    	+ (m_dot_nz/V_C);
+    P_C_dot = (k_C-1)*Q*(mi.rho_f/P_C)*(V_C_dot/V_C) ...
+    	- k_C*(m_dot_nz/(V_C*sqrt(rho))) - (k_C-1)*mi.q(T_C)/(P_C*V_C);
+
     state_dot(4) = mi.R_p_dot(m_dot_ox);
-    
-%     V_C = 2*pi*R_p*mi.L_g;
-%     dV_Cdt = 2*pi*mi.R_p_dot(m_dot_ox)*mi.L_g;
-%     
-%     [T_C, CP_C, k_C] = mi.NASACEA(OF, P_C);
-%     
-%     m_dot_n = 2;
-%     
-%     state_dot(5) = ( CP_C*T_C*(m_dot_ox + m_dot_f - m_dot_n)*(k_C-1) - P_C*k_C*dV_Cdt ) / V_C;
-%     
-%     [state_dot(6),state_dot(7)] = fsolve(@mi.MassRate(M_dot,M_ox_C,M_f_C,m_dot_ox,m_dot_f,m_dot_n),[0,0]);
-    
+    state_dot(5) = rho_C_dot;
+    state_dot(6) = P_C_dot;
+    state_dot(7) = T_C*((P_C_dot/P_C)-(rho_C_dot/rho_C));
+
 end
