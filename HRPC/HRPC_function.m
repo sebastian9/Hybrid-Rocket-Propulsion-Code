@@ -1,4 +1,4 @@
-%% State function definition
+%% State function definition %%
 function state_dot = HRPC_function(t,state,env) 
     
     n_oxv = state(1);
@@ -8,6 +8,9 @@ function state_dot = HRPC_function(t,state,env)
     rho_C = state(5);
     P_C = state(6);
     T_C = state(7);
+    M_ox_C = state(8);
+    M_f_C = state(9);
+    M_a_C = state(10);
    
     mi = env.Motor; % mi = motor_instance
 
@@ -35,7 +38,7 @@ function state_dot = HRPC_function(t,state,env)
     
     state_dot(1:3,1) = linsolve(M,V);  % Isolated derivatives
     
-    %% Control Volume 2
+    %% Control Volume 2 %%
 
     n_oxv_dot = state_dot(1);
     n_oxl_dot = state_dot(2);
@@ -46,10 +49,8 @@ function state_dot = HRPC_function(t,state,env)
     V_C = 2*pi*R_p^2*mi.L_g;
     V_C_dot = 2*pi*R_p*mi.L_g*mi.R_p_dot(m_dot_ox);
 
-    rho_ox_C = P_C/(env.R_u/T_C)
-    V_ox_C = V_C*((rho-mi.rho_f)/(rho_ox_C-rho_f));
-    V_f_C = V_C - V_ox_C;
-    OF = (rho_ox_C*V_ox_C)/(mi.rho_f*V_f_C);
+    M_C = M_ox_C + M_f_c + M_a_c;
+    OF = M_ox_C/M_f_C;
      
     [Q, k_C] = mi.NASACEA(OF);
     lambda = sqrt(k*(2/(k_C+1))^((k_C+1)/(k_C-1)));
@@ -63,5 +64,8 @@ function state_dot = HRPC_function(t,state,env)
     state_dot(5) = rho_C_dot;
     state_dot(6) = P_C_dot;
     state_dot(7) = T_C*((P_C_dot/P_C)-(rho_C_dot/rho_C));
+    state_dot(8) = m_dot_ox - m_dot_nz*(M_ox_C/M_C);
+    state_dot(9) = m_dot_f - m_dot_nz*(M_f_C/M_C);
+    state_dot(10) = -m_dot_nz*(M_a_C/M_C);
 
 end
