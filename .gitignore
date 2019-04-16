@@ -2,4 +2,7 @@ HRPC/PDFs/
 *.asv
 *.log
 *.aux
+HRPC/temp
+HRPC/*.inp
+HRPC/*.out
 HRPC/NASA CEA2/*

@@ -51,10 +51,10 @@ classdef Motors <handle
                 obj.R_p = prop(12);
                 obj.R_p_f = prop(13);
                 obj.L_g = prop(14);
-                obj.rho_f = prop(15);
-                obj.A_t = prop(16);
+                obj.rho_f = prop(15);                
                 obj.Q = prop(16); % Fuel energy density [J/kg]  
                 obj.q = prop(17); % Heat loss through the chamber walls [W] 
+                obj.A_t = prop(18);
                 obj.P_C = env.P;
                 obj.T_T = env.T;
                 obj.env = env;
