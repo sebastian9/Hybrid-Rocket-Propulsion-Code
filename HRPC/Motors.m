@@ -4,6 +4,7 @@
 classdef Motors <handle
     properties
         A_inj
+        A_t
         C_d_l
         c_P_T
         D_inj
@@ -21,6 +22,8 @@ classdef Motors <handle
         n_spv
         P_losses
         P_C
+        Q
+        q
         R_p
         R_p_f
         rho_f
@@ -32,7 +35,7 @@ classdef Motors <handle
         % Constructor takes data from motor property file
         function obj = Motors(motor_file,env) % Motor file is the motor data
             if nargin > 0
-                prop = readtable(motor_file,'Format','%s%f');
+                prop = readtable(motor_file,'Format','%s%f','HeaderLines', 1);
                 prop = table2array(prop(1:end,2));
                 obj.C_d_l = prop(1);
                 obj.D_inj = prop(2);
@@ -49,6 +52,9 @@ classdef Motors <handle
                 obj.R_p_f = prop(13);
                 obj.L_g = prop(14);
                 obj.rho_f = prop(15);
+                obj.A_t = prop(16);
+                obj.Q = prop(16); % Fuel energy density [J/kg]  
+                obj.q = prop(17); % Heat loss through the chamber walls [W] 
                 obj.P_C = env.P;
                 obj.T_T = env.T;
                 obj.env = env;
@@ -116,7 +122,7 @@ classdef Motors <handle
             text = extractBefore(text,7);
             k_C = str2double(text);
             
-%             delete test.inp test.out temp
+            delete test.inp test.out temp
         end
     end
     methods (Static)
