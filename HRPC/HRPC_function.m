@@ -6,7 +6,9 @@ function state_dot = HRPC_function(t,state,env)
     R_p = state(4);
     P_C = state(5);
 %     P_C = -2924.42*t^6 + 46778.07*t^5 - 285170.63*t^ 4 + 813545.02*t^3 - ...         
-%         1050701.53*t^2 + 400465.85*t + 1175466.2;
+%         1050701.53*t^2 + 400465.85*t + 1175466.2; % Fernandez Motor Test 1
+%     P_C = 95.92*t^6 - 2346.64*t^5 + 21128.78*t^4 - 87282.73*t^3 + ... 
+%         186675.17*t^2 - 335818.91*t + 3029190.03;  % Fernandez Motor Test 2
     T_C = state(6);
     rho_C = state(7);
     M_ox_C = state(8);

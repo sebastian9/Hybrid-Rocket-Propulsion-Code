@@ -85,10 +85,6 @@ classdef Motors <handle
             Tr = T/obj.T_crit_ox;
             H = 2.3215e7*(1 - Tr) ^ (0.384 + 0*Tr + 0*Tr^2);
         end
-        function [R_p_dot] = R_p_dot(obj,m_dot_ox)
-           a = 0.132e-3; n = 0.555; % Genevieve (2013) table 3.1
-           R_p_dot = a*(m_dot_ox/(pi*obj.R_p^2))^n;
-        end
         function [T_C, CP_C, k_C] = NASACEA(obj, OF, P_C)
             fid = fopen ('test.inp', 'w');
             fprintf (fid, ' prob ro equilibrium \n\n');
@@ -150,6 +146,14 @@ classdef Motors <handle
         function [dVdT] = dV_mol_oxl_dT(T)
             % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
             dVdT = -(0.27244^((1 - T/309.57)^0.2882 + 1)*0.2882*log(0.27244)*(1 - T/309.57)^(0.2882 - 1))/(2.781*309.57);
+        end
+        function [R_p_dot] = R_p_dot(m_dot_ox,R_p,P_C)
+%            Genevieve
+%            a = 0.132e-3; n = 0.555; % Genevieve (2013) table 3.1
+%            R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
+             % Chelaru, 2011 part 7
+             a = 0.22e-4; n = 0.68; m = 0.07; l = 0.09;
+             R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n*P_C^m*(2*R_p)^l;
         end
     end
 end
