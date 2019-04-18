@@ -11,7 +11,7 @@ function [result] = CombustionChamber(n_oxv_dot, n_oxl_dot, R_p, T_C, P_C, rho_C
 %     OF = M_ox_C/M_f_C;
      
 %     [~,~,k_C] = mi.NASACEA(OF, P_C);
-    k_C = 1.33;
+    k_C = 1.4;
     lambda = sqrt(k_C*(2/(k_C+1))^((k_C+1)/(k_C-1)));
     m_dot_nz = lambda*mi.A_t*sqrt(P_C*rho_C);
     rho_C_dot = (m_dot_ox/V_C) + (mi.rho_f-rho_C)*(V_C_dot/V_C) ...
@@ -23,7 +23,7 @@ function [result] = CombustionChamber(n_oxv_dot, n_oxl_dot, R_p, T_C, P_C, rho_C
     result(2,1) = P_C_dot;
     result(3,1) = T_C*((P_C_dot/P_C)-(rho_C_dot/rho_C));
     result(4,1) = rho_C_dot;
-    result(5,1) = 0;%m_dot_ox - m_dot_nz*(M_ox_C/M_C);
-    result(6,1) = 0;%m_dot_f - m_dot_nz*(M_f_C/M_C);
-    result(7,1) = 0;%-m_dot_nz*(M_a_C/M_C);
+    result(5,1) = m_dot_ox - m_dot_nz*(M_ox_C/M_C);
+    result(6,1) = m_dot_f - m_dot_nz*(M_f_C/M_C);
+    result(7,1) = -m_dot_nz*(M_a_C/M_C);
 end
