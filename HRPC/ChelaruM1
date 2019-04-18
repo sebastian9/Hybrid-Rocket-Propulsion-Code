@@ -1,0 +1,19 @@
+(Chelaru, 2011) M1 
+C_d_l, 0.07
+D_inj, 0.01
+m_oxt, 0.27
+m_spv, 0
+m_T, 2
+MW_ox, 44.013
+MW_spv, 4
+N_inj, 1
+P_losses, 0
+T_crit_ox, 309.57
+V_T, 0.005
+R_p, 0.00889
+R_p_f, 0.0145
+L_g, 0.127
+Rho_f, 900
+Q, 10.5e6
+q, 1000
+A_t, 0.397e-04

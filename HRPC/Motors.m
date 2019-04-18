@@ -145,17 +145,11 @@ classdef Motors <handle
         end
         function [V] = V_mol_oxl(T)
             % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
-            V = 0.27244^(1+(1-T/309.57)^0.2882)/2.781;
+            V = 0.27244.^(1+(1-T./309.57).^0.2882)./2.781;
         end
         function [dVdT] = dV_mol_oxl_dT(T)
             % molar specific volume of liquid N2O [m^3/kmol] coefficients Q1 = 2.781; Q2 = 0.27244; Q3 = 309.57; Q4 = 0.2882;
             dVdT = -(0.27244^((1 - T/309.57)^0.2882 + 1)*0.2882*log(0.27244)*(1 - T/309.57)^(0.2882 - 1))/(2.781*309.57);
         end
-%         function M = mi.MassRate(M_dot,M_ox_C,M_f_C,m_dot_ox,m_dot_f,m_dot_n)
-%             % mass function
-%             deltat = 0.005;
-%             M(1) = M_dot(1) - m_dot_ox + m_dot_n / ( 1 + (M_f_C + M_dot(2)*deltat)/(M_ox_C + M_dot(1)*deltat));
-%             M(2) = M_dot(2) - m_dot_f + m_dot_n / ( 1 + (M_ox_C + M_dot(1)*deltat)/(M_f_C + M_dot(2)*deltat));
-%         end
     end
 end

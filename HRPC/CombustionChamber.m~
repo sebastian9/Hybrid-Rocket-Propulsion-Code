@@ -1,7 +1,8 @@
 %% Combustion Chamber %%
 function [result] = CombustionChamber(n_oxv_dot, n_oxl_dot, R_p, T_C, P_C, rho_C, M_ox_C, M_f_C, M_a_C, mi)
 
-    m_dot_ox = -(n_oxl_dot - n_oxv_dot)*mi.MW_ox;
+%     m_dot_ox = -(n_oxl_dot - n_oxv_dot)*mi.MW_ox;
+    m_dot_ox = Cd*A0*sqrt(rho_ox*(p_ox
     m_dot_f = mi.R_p_dot(m_dot_ox)*(mi.L_g*pi*2*mi.R_p)*mi.rho_f;
     
     V_C = 2*pi*R_p^2*mi.L_g;

@@ -1,6 +1,6 @@
 clear
 
-env = Environments(101325,286.5,'ChelaruM1'); % Pa % K % motorfile
+env = Environments(101325,286.5,'motor1'); % Pa % K % motorfile
 
 %% State function initial condition and solution
 
