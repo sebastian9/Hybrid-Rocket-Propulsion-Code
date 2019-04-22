@@ -12,12 +12,9 @@ function [result] = CombustionChamber(n_oxv_dot, n_oxl_dot, R_p, T_C, P_C, rho_C
     V_C_dot = 2*pi*R_p*mi.L_g*mi.R_p_dot(m_dot_ox,R_p,P_C);
 
     M_C = abs(M_ox_C) + abs(M_f_C) + abs(M_a_C);
-%     OF = M_ox_C/M_f_C;
-     
-%     [~,~,k_C] = mi.NASACEA(OF, P_C);
+
     k_C = 1.4;
-    lambda = sqrt(k_C*(2/(k_C+1))^((k_C+1)/(k_C-1)));
-    m_dot_nz = lambda*mi.A_t*sqrt(P_C*rho_C);
+    [m_dot_nz,result(8,1)] = CV3 (mi, k_C, P_C, rho_C);
     rho_C_dot = (m_dot_ox/V_C) + (mi.rho_f-rho_C)*(V_C_dot/V_C) ...
     	- (m_dot_nz/V_C);
     P_C_dot = (k_C-1)*mi.Q*(mi.rho_f)*(V_C_dot/V_C) ...

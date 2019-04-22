@@ -16,5 +16,5 @@ function state_dot = HRPC_function(t,state,env)
     M_a_C = state(10);
     % State-Space equations
     state_dot(1:3,1) = OxidizerTank(n_oxv, n_oxl, T_T, P_C, env.Motor);
-    state_dot(4:10,1) = CombustionChamber(state_dot(1), state_dot(2), R_p, T_C, P_C, rho_C, M_ox_C, M_f_C, M_a_C, env.Motor);
+    state_dot(4:11,1) = CombustionChamber(state_dot(1), state_dot(2), R_p, T_C, P_C, rho_C, M_ox_C, M_f_C, M_a_C, env.Motor);
 end

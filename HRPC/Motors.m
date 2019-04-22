@@ -5,6 +5,7 @@ classdef Motors <handle
     properties
         A_inj
         A_t
+        A_e
         C_d_l
         c_P_T
         D_inj
@@ -15,6 +16,7 @@ classdef Motors <handle
         m_spv
         MW_ox
         MW_spv
+        n_eff
         N_inj
         n_oxt
         n_oxl
@@ -29,6 +31,7 @@ classdef Motors <handle
         rho_f
         T_crit_ox        
         T_T
+        theta_noz
         V_T
     end
     methods
@@ -55,6 +58,9 @@ classdef Motors <handle
                 obj.Q = prop(16); % Fuel energy density [J/kg]  
                 obj.q = prop(17); % Heat loss through the chamber walls [W] 
                 obj.A_t = prop(18);
+                obj.A_e = prop(19);
+                obj.theta_noz = prop(20);
+                obj.n_eff = prop(21);
                 obj.P_C = env.P;
                 obj.T_T = env.T;
                 obj.env = env;
