@@ -1,4 +1,4 @@
-function [m_dot_nz, F] = CV3(mi, k_C, P_C, rho_C)
+function [m_dot_nz, F] = Nozzle(mi, k_C, P_C, rho_C)
     AtAe = mi.A_t/mi.A_e;
     sigma_c = 0.9;%0.5*(1+cos(mi.theta_noz*pi/180));
 

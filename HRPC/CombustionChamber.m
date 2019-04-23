@@ -22,7 +22,7 @@ function [result] = CombustionChamber(n_oxv_dot, n_oxl_dot, R_p, T_C, P_C, rho_C
 
     k_C = 1.4; % Ratio of specific heats
     % Nozzle Control Volume, [kg/s], [N]
-    [m_dot_nz,result(8,1)] = CV3(mi, k_C, P_C, rho_C);
+    [m_dot_nz,result(8,1)] = Nozzle(mi, k_C, P_C, rho_C);
     % Combustion chamber density rate of change [kg.m^-3.s^-1]
     % Chelaru, 2011, eq. 15
     rho_C_dot = (m_dot_ox/V_C) + (mi.rho_f-rho_C)*(V_C_dot/V_C) ...
