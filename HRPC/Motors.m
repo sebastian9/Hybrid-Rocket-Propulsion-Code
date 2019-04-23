@@ -153,11 +153,11 @@ classdef Motors <handle
         end
         function [R_p_dot] = R_p_dot(m_dot_ox,R_p,P_C)
 %            Genevieve
-%            a = 0.000155; n = 0.5; % Genevieve (2013) table 3.1
-%            R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
+           a = 0.000155; n = 0.5; % Genevieve (2013) table 3.1
+           R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
              % Chelaru, 2011 part 7
-             a = 0.22e-4; n = 0.68; m = 0.07; l = 0.09;
-             R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n*P_C^m*(2*R_p)^l;
+%              a = 0.22e-4; n = 0.68; m = 0.07; l = 0.09;
+%              R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n*P_C^m*(2*R_p)^l;
         end
     end
 end
