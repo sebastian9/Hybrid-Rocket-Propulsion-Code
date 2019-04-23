@@ -1,6 +1,6 @@
 clear
 
-env = Environments(100000,298,'motor1'); % Pa % K % motorfile
+env = Environments(100000,293,'motor1'); % Pa % K % motorfile ; % T = 293 Chelaru
 
 %% State function initial condition and solution
 
@@ -16,7 +16,7 @@ M_f_C_0 = 0;
 M_a_C_0 = rho_C_0*(pi*R_p_0^2)*env.Motor.L_g;
 
 state_0 = [n_oxv_0, n_oxl_0, T_T_0, R_p_0, P_C_0, T_C_0, rho_C_0, M_ox_C_0, M_f_C_0, M_a_C_0, 0];
-tspan = 0:0.005:30; % s
+tspan = 0:0.005:40; % s
 
 opts    = odeset('Events', @stopIntegrationEvent);
 [t,state] = ode45(@(t,state) HRPC_function(t,state,env),tspan,state_0,opts);
@@ -27,7 +27,7 @@ P_T = 1e-5*(state(:,1) + env.Motor.n_spv) .* env.R_u .* state(:,3)./ (env.Motor.
 %%  Plot results 
 figure(1)
 subplot(2,4,1), plot(t(:),state(:,3),'k'), ... 
-    title('Temperature'),... 
+    title('Average Tank Temperature'),... 
     xlabel('Time [s]'),... 
     ylabel('Temperature [K]');
     set(gca, ...

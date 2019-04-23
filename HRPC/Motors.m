@@ -16,7 +16,6 @@ classdef Motors <handle
         m_spv
         MW_ox
         MW_spv
-        n_eff
         N_inj
         n_oxt
         n_oxl
@@ -60,7 +59,6 @@ classdef Motors <handle
                 obj.A_t = prop(18);
                 obj.A_e = prop(19);
                 obj.theta_noz = prop(20);
-                obj.n_eff = prop(21);
                 obj.P_C = env.P;
                 obj.T_T = env.T;
                 obj.env = env;
@@ -155,11 +153,11 @@ classdef Motors <handle
         end
         function [R_p_dot] = R_p_dot(m_dot_ox,R_p,P_C)
 %            Genevieve
-           a = 0.000155; n = 0.5; % Genevieve (2013) table 3.1
-           R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
+%            a = 0.000155; n = 0.5; % Genevieve (2013) table 3.1
+%            R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n;
              % Chelaru, 2011 part 7
-%              a = 0.22e-4; n = 0.68; m = 0.07; l = 0.09;
-%              R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n*P_C^m*(2*R_p)^l;
+             a = 0.22e-4; n = 0.68; m = 0.07; l = 0.09;
+             R_p_dot = a*(m_dot_ox/(pi*R_p^2))^n*P_C^m*(2*R_p)^l;
         end
     end
 end
