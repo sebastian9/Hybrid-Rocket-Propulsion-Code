@@ -95,9 +95,9 @@ function [Cn_alpha, Xcp, Cda, zeta, Ssm, Ssm_B, Ccm]=Cn_alphaXcp(DTF)
     Cda_jet = DTF.deltaMass *(lcn^2 - lcc^2);
     % Aerodynamic damping
     Cda_l = 0.5*rho* V * A_ref *( fin.Cn_alpha*(fin.Xcp-DTF.Xcm)^2+...
-    cone.Cn_alpha*(cone.Xcp - DTF.Xcm)^2 + cyl.Cn_alpha*(cyl.Xcp - DTF.Xcm)^2);
+    cone.Cn_alpha*(cone.Xcp - DTF.Xcm)^2 + cyl.Cn_alpha*(cyl.Xcp - DTF.Xcm)^2); % apparently missing to square speed
     % Damping Moment Coefficient
-    Cda = Cda_l+ Cda_jet;
+    Cda = Cda_l+ Cda_jet; % apparently Dimensionally inconssistent
     %% Cn_alpha
     Cn_alpha = fin.Cn_alpha + cyl.Cn_alpha + cone.Cn_alpha;
     %% Static Stability Margin

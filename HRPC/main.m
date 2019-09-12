@@ -5,7 +5,7 @@ clear
 % a Motor for the analysis, the motor file contains all the relevant
 % variables in standard units. Except for Pressure, Temperature and the ratio of specific
 % heats, defined in the combustion chamber function.
-env = Environments(100000,293,'motor1'); % Pa % K % motorfile ; % T = 293 Chelaru
+env = Environments(100000,293,'ChelaruM2'); % Pa % K % motorfile ; % T = 293 Chelaru
 
 %% State function initial conditions
 
@@ -20,6 +20,7 @@ M_ox_C_0 = 0; % kg
 M_f_C_0 = 0; % kg
 M_a_C_0 = rho_C_0*(pi*R_p_0^2)*env.Motor.L_g; % kg
 state_0 = [n_oxv_0, n_oxl_0, T_T_0, R_p_0, P_C_0, T_C_0, rho_C_0, M_ox_C_0, M_f_C_0, M_a_C_0, 0];
+% state_0 = [n_oxv_0, n_oxl_0, T_T_0];
 
 %% State Function Setup
 

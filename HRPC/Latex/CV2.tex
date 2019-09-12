@@ -1,0 +1,128 @@
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
+
+\title{Cámara de Combustión}
+\author{José María Fernández Rodríguez \& Sebastián López Sánchez}
+
+\maketitle
+
+La siguiente parte del modelo termodinámico de un motor de cohete híbrido consiste en la cámara de combustión (Figura 1). La cámara de combustión se trata de un volumen de control cilíndrico $V_{c}$ a presión $P_{c}$ de un radio de puerto $R_{p}$ que crece con el tiempo debido a la quema del combustible de densidad $\rho_{f}$ y poder calorífico $Q_{f}$. La cámara de combustión recibe el flujo de oxidante $-\frac{d}{dt}(n_{ox,l}+n_{ox,v})$ y a través de esto, la combustión, y el escape de los gases a través de la tobera varía la acumulación de gases en la cámara, medida por $\rho_{c}$ y la presión $P_{c}$, así como la temperatura $T_{c}$. \par
+
+Figura 2: Cámara de combustión \par
+
+A partir de la investigación, el modelo termodinámico elegido para la cámara de combustión fue el planteado por (Chelaru), a continuación se explican las \emph{restricciones} del modelo y su derivación.
+
+Uno de los factores más importantes para describir el comportamiento de la cámara de combustión de un motor cohete híbrido es la tasa de regresión, del combustible. Esta tasa de regresión se obtiene a partir de modelos experimentales, puestos en función de distintas variables, para una primera implementación de nuestro trabajo, utlizamos el siguiente modelo (fuentes 1 y 2 de Chelaru):
+
+\begin{equation}
+  \dot{R}_{p} = a G_{ox}^n P_{c}^m (2 R_{p})^l
+  \label{regresion}
+\end{equation}
+
+Donde $G_{ox}$ es el flujo másico por unidad de área del puerto $\dot{m}_{ox}(\pi R_{p}^2)^{-1}$ y $a$, $n$, $m$, y $l$ son constantes determinadas experimentalmente para distintas combinaciones de oxidantes y combustibles.
+
+Ahora, partiendo de que un volumen diferencial anular es $dV = 2 \pi r L dr$ la razón de cambio del volumen de la cámara de combustión puede ser expresada por:
+
+\begin{equation}
+  \dot{V}_{c} = 2 \pi R_{p} L_{g} \dot{R}_{p}
+  \label{vol dot}
+\end{equation}
+
+Partiendo de la ecuación de la continuidad, que relaciona el cambio de la masa en el volumen de control con la masa que entra y sale del mismo:
+
+\begin{equation}
+  \frac{\partial (\rho_C V_{c})}{\partial t} = \dot{m}_e - \dot{m}_s
+  \label{continuidad}
+\end{equation}
+
+Donde, el flujo másico entrante $\dot{m}_{e}$ es el flujo másico proveniente del tanque de oxidante y del combustible que entra a la cámara de combustión
+
+\begin{equation}
+  \dot{m}_{e} = \dot{m}_ox + \dot{V}_{c} \rho_f
+  \label{masa entrante}
+\end{equation}
+
+\begin{equation}
+  \dot{m}_{ox} = - (MW)_{ox} \frac{d}{dt}(n_{ox,l}+n_{ox,v})
+\end{equation}
+
+Y el flujo másico que sale $\dot{m}_{s}$ es el flujo a través de la tobera $\dot{m}_{noz}$, ecuación XX (Sutton), es:
+
+\begin{equation}
+  \dot{m}_{noz} = \Lambda A_{t} \sqrt{P_{c} \rho_{c}}
+  \label{masa saliente}
+\end{equation}
+
+\begin{equation}
+  \Lambda = \sqrt{k(2 /(k+1))^{(k+1) /(k-1)}}
+\end{equation}
+
+Al sustituir las ecuaciones \ref{masa entrante} y \ref{masa saliente} en \ref{continuidad}, y aplicando la derivada al producto $\rho_C V_{c}$, es posible encontrar una expresión para la tasa de cambio de la densidad del volumen de control.
+
+\begin{equation}
+  \dot{\rho_{c}}=\frac{\dot{m}_{ox}}{V_{c}}+\left(\rho_{f}-\rho_{c}\right) \frac{\dot{V_{c}}}{V_{c}}-\frac{\dot{m}_{noz}}{V_{c}}
+\end{equation}
+
+Para encontrar la siguiente ecuación, Chelaru propone hacer un balance del cambio de la energía interna agregada al sistema:
+
+\begin{equation}
+  d U=d U_{1}+d U_{2}+d U_{3}+d U_{4}
+  \label{energía interna}
+\end{equation}
+
+Donde el total de la variación de la energía interna del volumen de control $dU$ es dada por la energía química liberada por la combustión:
+
+\begin{equation}
+  d U=Q_{c} d m_{f}
+\end{equation}
+
+Y esta es convertida en:
+
+\begin{itemize}
+  \item El crecimiento en energía interna debido a la variación en la densidad de la cámara de combustión por la generación de gases:
+  \begin{equation}
+    d U_{1}=C_{V} T V_{c} d \rho_{c}=R_{u}(k-1)^{-1} T_{c} V_{c} d \rho_{c}
+  \end{equation}
+  \item El cambio en la energía interna debido a la temperatura:
+  \begin{equation}
+    d U_{2}=\rho_{c} V_{c} C_{V} d T_{c}=R_{u}(k-1)^{-1} \rho_{c} V_{c} d T_{c}
+  \end{equation}
+  \item Energía cinética liberada por los gases de escape:
+  \begin{equation}
+    d U_{3} = C_{p} T_{c} d m_{noz} = k(k-1)^{-1} R_{u} T_{c} d m_{noz}
+  \end{equation}
+  \item Pérdida de energía debido a la conducción en las paredes:
+  \begin{equation}
+    d U_{4}=q_{lost} dt
+  \end{equation}
+\end{itemize}
+
+Al derivar con respecto al tiempo:
+
+\begin{equation}
+
+\end{equation}
+
+\begin{equation}
+  Q_{C} \dot{m}_{f} / C_{V}=T_{c} V_{c} \dot{\rho_{c}}+\rho_{c} V_{c} \dot{T_{c}}+k T_{c} \dot{m}_{noz}+q_{lost} / C_{V}
+\end{equation}
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
+
+\end{document}

@@ -1,53 +1,137 @@
-\documentclass[10pt]{article}
-\usepackage[legalpaper, margin=1in]{geometry}
+% --------------------------------------------------------------
+% This is all preamble stuff that you don't have to worry about.
+% Head down to where it says "Start here"
+% --------------------------------------------------------------
+
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amsthm,amssymb}
 \usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{microtype}
-\usepackage[framed,numbered,autolinebreaks,useliterate]{mcode}
-\usepackage{pdfpages}
-\usepackage{graphicx}
-\usepackage{fancyhdr}
-\graphicspath{ {./figures/} }
-
-\setlength{\parindent}{0pt}
-
-\pagestyle{fancy}
-\fancyhf{}
-\lhead{Control Volume 1}
-\rhead{HRPC}
-\rfoot{Page \thepage}
-\lfoot{Sebastián López Sánchez}
 
 \begin{document}
 
-\begin{center}
-    \textbf{Governing Equations}
-\end{center}
+% --------------------------------------------------------------
+%                         Start here
+% --------------------------------------------------------------
 
-\[
-	\dot{n}_{ox,v} + \dot{n}_{ox,l} = -C_{d}N_{inj}A_{inj}\sqrt{\frac{2(P_{T}-P_{losses}-P_{C})}{(MW)_{ox}\overline{V}_{ox,l}}}
-\]\\
+\title{Tanque de Oxidante}
+\author{José María Fernández Rodríguez \& Sebastián López Sánchez}
 
-\[
-	-\overline{V}_{ox,l} P_{cr,ox} \dot{n}_{ox,l} + \left( \left(V_{T}-n_{ox,l}\overline{V}_{ox,l}\right) \left( \frac{P_{cr,ox}}{dT} \right) -n_{ox,l} P_{cr,ox} \left( \frac{\overline{V}_{ox,l}}{dT} \right) \right) \dot{T}_{T} = R_{u} \left( n_{ox,v} \dot{T}_{T} + T_{T} \dot{n}_{ox,v} \right)
-\]\\
+\maketitle
 
-\[
-	(m_{T}c_{P_{T}} + n_{ox,l}\overline{C}_{P_{ox,l}} + n_{ox,v}\overline{C}_{V_{ox,v}} + n_{sp,v}\overline{C}_{V_{sp,v}})\dot{T}_{T} = \dot{n}_{ox,v} (R_{u}T_{T} - \Delta\overline{H}_{ox,v}) + \dot{n}_{ox,l}(P_{T}\overline{V}_{ox,l})
-\]\\
+El modelo termodinámico de un motor de cohete híbrido comienza por el tanque de oxidante (Figura 1). El tanque consiste de un volumen determinado $V_{T}$ a una temperatura $T_T$, el cual se encuentra sujeto a una presión interna $P_T$, generada por la candtidad de oxidante auto-presurizante (Óxido Nitroso $N_{2}O$) en estado líquido $n_{ox,l}$ y gaseoso $n_{ox,v}$, así como por la cantidad de gas presurizante $n_{sp,v}$. \par
 
-\[
-	\dot{r}(t) = a \left( \frac{ \dot{n}_{ox,l} (MW)_{ox} }{\pi(R_{p}(t)^{2})} \right)^{n}
-\]\\
+Figura 1: Tanque \par
 
-Linealizando por serie de Taylor: \\
+A partir de la investigación, el modelo termodinámico elegido para el tanque fue el modelo ideal planteado por (Fernández), a continuación se explican las \emph{restricciones} del modelo y su derivación:
 
-\[
-	\dot{r}(t) = a \left( \frac{ \dot{n}_{ox,l}(t-t_{step}) (MW)_{ox} }{\pi(R_{p}(t)^{2})} \right)^{n} + n a \left( \frac{ \dot{n}_{ox,l}(t-t_{step}) (MW)_{ox} }{\pi(R_{p}(t)^{2})} \right)^{n}(\dot{n}_{ox,l}(t) - \dot{n}_{ox,l}(t-t_{step}))
-\]\\
+\begin{enumerate}
+    \item Se asume que los contenidos del tanque se encuentran en equilibrio de fase en todo momento. El tanque se vacía de tal manera que la temperatura, $T_T$, y la presión, $P_P$, de las fases líquida y gaseosa son uniformes durante el proceso de drenado.
+    \item Se desprecia el efecto de la gravedad y la aceleración en el tanque.
+    \item Las paredes del tanque son adiabáticas y se encuentran en equilibrio térmico con el tanque.
+    \item Se desprecia la energía potencial y cinética de los contenidos del tanque.
+    \item Se asume que el comportamiento de los gases se apega a la ley de gases ideales.
+    \item El gas presurizante (He) no se condensa y permanece en estado gaseoso.
+    \item El flujo de oxidante hacia la cámara de combustión es debido a la caída de presión entre el tanque de oxidante y la cámara de combustión, y las pérdidas son tomadas en cuenta a través de un coeficiente de descarga.
+    \item La cantidad de Helio permanece constante durante el proceso de drenado.
+    \item La evaporación ocurre en la interfaz de las fases líquida y gaseosa. Debido al estado de equilibrio asumido por el modelo, no ocurre ebullición dentro del tanque.
+\end{enumerate}
 
-The unknowns are $\dot{n}_{ox,l}$, $\dot{n}_{ox,v}$ and $\dot{T}_{T}$
+La variación molar del contenido de oxidante líquido en el tanque, siguiendo el principio de conservación de la masa, es descrita por la siguiente ecuación:
+
+\begin{equation}
+    \dot{n}_{ox,l} = -\dot{n}_{ox,v} - \dot{n}_{d}
+    \label{descarga 1}
+\end{equation}
+
+Y la ecuación de estado estacionario para el flujo másico a través de un orificio es:
+
+\begin{equation}
+    \dot{m}_{d} = C_{d} A_{inj} \sqrt{2\rho_{ox,l}(P_{T} - P_{c})}
+\end{equation}
+
+En su forma molar:
+
+\begin{equation}
+    \dot{n}_{d} = C_{d} A_{inj} \sqrt{ \frac{ 2\rho_{ox,l}(P_{T} - P_{c}) }{ (MW)_{ox} \overline{V}_{ox,l} } }
+    \label{descarga 2}
+\end{equation}
+
+Donde $C_{d}$ es el coeficiente de descarga, $A_{inj}$ es el área de los inyectores, $(MW)_{ox}$ es el peso molecular del oxidante, y $\overline{V}_{ox,l}$ es el volumen molar del óxido nitroso. Despejando la ecuación \ref{descarga 1} para $\dot{n}_{ox,l}$ y $\dot{n}_{ox,v}$ obtenemos la primera ecuación necesaria para resolver el sistema:
+
+\begin{equation}
+    \dot{n}_{ox,v} + \dot{n}_{ox,l} = -C_{d}N_{inj}A_{inj}\sqrt{\frac{2(P_{T}-P_{c})}{(MW)_{ox}\overline{V}_{ox,l}}}
+    \label{ox 1}
+\end{equation}
+
+Para la siguiente ecuación, se toma ventaja de la restricción de que el volumen del tanque permanece constante, la ley de presiones parciales de Raoult, y la ecuación de gases ideales.
+
+La restrición de volumen constante puede ser descrita por la siguiente ecuación:
+
+\begin{equation}
+    V_{T} = V_{g} + V_{l} = V_{sp,v} + V_{ox,v} + n_{ox,l} \overline{V}_{ox,l}
+    \label{volumen}
+\end{equation}
+
+La ecuación de equilibrio de la ley de presiones parciales de Raoult relaciona la presión total de los gases con la presión soportada por cada uno de los gases, y en el caso actual es la siguiente:
+
+\begin{equation}
+    P_{T} \left( \frac{n_{ox,v}}{n_{sp,v}+n_{ox,v}} \right) = P^{*}_{ox,v}
+    \label{raoult}
+\end{equation}
+
+Por último tenemos la ecuación de gases ideales, expresada con las variables del modelo, y tomando en cuenta la restricción de la ecuación \ref{volumen} queda de la siguiente manera:
+
+\begin{equation}
+    P_{T}(V_{T} - n_{ox,l}  \bar{V}_{ox,l})=(n_{sp,v}+n_{ox,v}) R_{u} T_{T}
+    \label{ideales}
+\end{equation}
+
+Al combinar las ecuaciones \ref{raoult}, y \ref{ideales}, eliminando la variable $P_{T}$
+
+\begin{equation}
+    P^{*}_{ox,v} (V_{T} - n_{ox,l} \bar{V}_{ox,l})  = n_{ox,v} R_{u} T_{T}
+\end{equation}
+
+Derivando con respecto al tiempo, y usando la regla de la cadena
+
+\begin{equation}
+    (V_{T} - n_{ox,l}\overline{V}_{ox,l}) \frac{P^{*}_{ox,v}}{dT} \dot{T}_{T} - \dot{n}_{ox,l} \overline{V}_{ox,l} P^{*}_{ox,v} = R_{u} \left( T_{T} \dot{n}_{ox,v} + \dot{T}_{T} n_{ox,v} \right)
+    \label{ox 2}
+\end{equation}
+
+La ecuación \ref{ox 2}, donde las incógnitas son $\dot{n}_{ox,l}$, $\dot{n}_{ox,v}$ y $\dot{T}_{T}$, es la segunda ecuación necesaria para modelar el sistema.
+
+Ahora, haciendo un balance de energía en el volumen de control de la Figura REFERENCIA, según la primera ley de la termodinámica para sistemas abiertos $\dot{U} = \dot{Q} + \dot{W} + \dot{m}h$; y tomando en cuenta que, de acuerdo con las restricciones, el proceso es adiabático $\dot{Q} = 0$ y que no existe trabajo de frontera $\dot{W} = 0$, el balance de energía queda de la manera siguiente:
+
+\begin{equation}
+  \frac{d}{dt}\left( m_{T} u_{T} + n_{ox,l} \overline{U}_{ox,l} + n_{ox,v} \overline{U}_{ox,v} + n_{sp,v} \overline{U}_{sp,v} \right) = -\frac{d}{dt}(n_{ox,l} + n_{ox,v})\overline{H}_{ox,l}
+\end{equation}
+
+Donde $m_{t}$ es la masa del tanque y $u_{T}$ es la energía específica del tanque. Usando la regla de la cadena con los términos de la energía interna:
+
+\begin{equation}
+  \begin{split}
+    m_{T} \dot{u}_{T} + n_{ox,l} \dot{\overline{U}}_{ox,l} + n_{ox,v} \dot{\overline{U}}_{ox,v} + n_{sp,v} \dot{\overline{U}}_{sp,v} = \\
+    \dot{n}_{ox,l}(\overline{H}_{ox,l} - \overline{U}_{ox,l}) + \dot{n}_{ox,v}(\overline{H}_{ox,l} - \overline{U}_{ox,v})
+  \end{split}
+\end{equation}
+
+A continuación haciendo uso de lo siguiente: la entalpía de vaporización está relacionada a la entalía líquida por ${H}_{ox,v} - {H}_{ox,l} = \delta {H}_{ox,v}$; la definición de la entalpía para los gases $H = U + PV$; la ecuación de gases ideales $P\overline{V} = RT$; la definición del calor específico a volumen constante $d\overline{U} = C_{V}dT$; y que $C_{V} \approx C_{P}$ para materiales sólidos; simplificamos la ecuación:
+
+\begin{equation}
+  \begin{split}
+    ( m_{T} c_{P_{T}} + n_{ox,l} \overline{C}_{V_{ox,l}} + n_{ox,v} \overline{C}_{V_{ox,v}} + n_{sp,v} \overline{C}_{V_{sp,v}} ) \frac{dT_{T}}{dt} = \\
+    \dot{n}_{ox,l}(P\overline{V}_{ox,l}) + \dot{n}_{ox,v}(R_{u} T_{T} - \Delta {H}_{ox,v})
+    \label{ox 3}
+  \end{split}
+\end{equation}
+
+La ecuación \ref{ox 3}, donde las incógnitas son $\dot{n}_{ox,l}$, $\dot{n}_{ox,v}$ y $\dot{T}_{T}$, es la tercera y última ecuación necesaria para resolver el sistema de tanque de oxidante descrito.
+
+% --------------------------------------------------------------
+%     You don't have to mess with anything below this line.
+% --------------------------------------------------------------
 
 \end{document}
