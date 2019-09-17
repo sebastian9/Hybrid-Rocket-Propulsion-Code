@@ -5,7 +5,7 @@ clear
 % a Motor for the analysis, the motor file contains all the relevant
 % variables in standard units. Except for Pressure, Temperature and the ratio of specific
 % heats, defined in the combustion chamber function.
-env = Environments(100000,293,'ChelaruM2'); % Pa % K % motorfile ; % T = 293 Chelaru
+env = Environments(100000,300,'motor1'); % Pa % K % motorfile ; % T = 293 Chelaru
 
 %% State function initial conditions
 
@@ -27,7 +27,7 @@ state_0 = [n_oxv_0, n_oxl_0, T_T_0, R_p_0, P_C_0, T_C_0, rho_C_0, M_ox_C_0, M_f_
 % Initializes the ODE solver, it integrates the HRPC_function
 % state equation through the given tspan, with the given initial conditions
 % state_0, with the stop criteria defined in opts.
-tspan = 0:0.005:40; % Default time span and step for the integration.
+tspan = 0:0.005:50; % Default time span and step for the integration.
 opts = odeset('Events', @stopIntegrationEvent); % Stop criteria for the ODE solver
 [t,state] = ode45(@(t,state) HRPC_function(t,state,env),tspan,state_0,opts); % Initialization
 

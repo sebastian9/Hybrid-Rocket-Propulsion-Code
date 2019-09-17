@@ -81,7 +81,7 @@ Para encontrar la siguiente ecuación, Chelaru propone hacer un balance del camb
 
 \begin{equation}
   d U=d U_{1}+d U_{2}+d U_{3}+d U_{4}
-  \label{energía interna}
+  \label{energia interna}
 \end{equation}
 
 Donde el total de la variación de la energía interna del volumen de control $dU$ es dada por la energía química liberada por la combustión:
@@ -95,15 +95,15 @@ Y esta es convertida en:
 \begin{itemize}
   \item El crecimiento en energía interna debido a la variación en la densidad de la cámara de combustión por la generación de gases:
   \begin{equation}
-    d U_{1}=C_{V} T V_{c} d \rho_{c}=R_{u}(k-1)^{-1} T_{c} V_{c} d \rho_{c}
+    d U_{1}=C_{V} T V_{c} d \rho_{c}
   \end{equation}
   \item El cambio en la energía interna debido a la temperatura:
   \begin{equation}
-    d U_{2}=\rho_{c} V_{c} C_{V} d T_{c}=R_{u}(k-1)^{-1} \rho_{c} V_{c} d T_{c}
+    d U_{2}=\rho_{c} V_{c} C_{V} d T_{c}
   \end{equation}
   \item Energía cinética liberada por los gases de escape:
   \begin{equation}
-    d U_{3} = C_{p} T_{c} d m_{noz} = k(k-1)^{-1} R_{u} T_{c} d m_{noz}
+    d U_{3} = C_{p} T_{c} d m_{noz}
   \end{equation}
   \item Pérdida de energía debido a la conducción en las paredes:
   \begin{equation}
@@ -111,14 +111,31 @@ Y esta es convertida en:
   \end{equation}
 \end{itemize}
 
-Al derivar con respecto al tiempo:
+Al derivar con respecto al tiempo y dividir entre el calor específico a volumen constante:
 
 \begin{equation}
-
+  Q_{C} \dot{m}_{f} / C_{V} = T_{c} V_{c} \dot{\rho_{c}} + \rho_{c} V_{c} \dot{T_{c}} + k T_{c} \dot{m}_{noz} + q_{lost} / C_{V}
 \end{equation}
 
+Dividiendo entre $\rho_{c} V_{c} T_{c}$, tomando en cuenta que el calor específico a calor constante puede ser derivado de $C_{V}=R/(k-1)$, y que de la ecuación de los gases ideales $R = P_{c} / (\rho_{c} T{c})$:
+
 \begin{equation}
-  Q_{C} \dot{m}_{f} / C_{V}=T_{c} V_{c} \dot{\rho_{c}}+\rho_{c} V_{c} \dot{T_{c}}+k T_{c} \dot{m}_{noz}+q_{lost} / C_{V}
+  (k-1) Q_{C} \frac{\rho_{f}}{P_{c}} \frac{\dot{V}}{V_{c}} = \frac{\dot{\rho_{c}}}{\rho_{c}} + \frac{\dot{T_{c}}}{T_{c}} + k \frac{\dot{m}_{noz}}{\rho_{c} V_{c}} + q_{lost} \frac{(k-1)}{P_{c} V_{c}}
+  \label{temperatura}
+\end{equation}
+
+Ahora, a partir de la ecuación de estado en su forma diferencial $dp = R (d\rho T + \rho dT)$, derivándola con respecto al tiempo, y dividiendo entre la presión $p = R \rho T$ obtenemos una ecuación que relaciona las tasas de cambio de las variables de estado.
+
+\begin{equation}
+  \frac{\dot{p}}{p}=\frac{\dot{\rho}}{\rho} + \frac{\dot{T}}{T}
+  \label{tasas ideales}
+\end{equation}
+
+Sustituyendo la ecuación \ref{tasas ideales} en \ref{temperatura} se obtiene una ecuación que describe la tasa de cambio de la presión:
+
+\begin{equation}
+   \dot{P_{c}}= (k-1) Q_{C} \rho_{f} \frac{\dot{V}}{V_{c}} - k \dot{m}_{noz} \frac{P_{c}}{\rho_{c} V_{c}} - q_{lost} \frac{(k-1)}{V_{c}}
+  \label{temperatura}
 \end{equation}
 
 % --------------------------------------------------------------
