@@ -1,33 +1,6 @@
-function [m_dot_nz, F] = Nozzle(mi, k_C, P_C, rho_C)
-    AtAe = mi.A_t/mi.A_e;
-    sigma_c = 0.5*(1+cos(mi.theta_noz*pi/180));
-
-    P_1st = (2/(k_C+1))^(k_C/(k_C-1)); % Choked Flow Criteria, Isentropic Flow Equations
-
-    if mi.env.P/P_C >= P_1st % Nozzle is not choked
-        if P_C-mi.env.P > 0
-            % Bernoulli equation, exit static pressure is equal to
-            % atmospheric
-            m_dot_nz = mi.A_t*sqrt(2*rho_C*(P_C-mi.env.P));;
-        else
-            % Not backflow allowed in the model
-            m_dot_nz = 0;
-        end
-        % Continuity equation
-        v_e = m_dot_nz/(rho_C*mi.A_e);
-        % Thrust equation
-        F = sigma_c*m_dot_nz*v_e;
-        % F = 10;
-    else % Nozzle is choked
-        % Isentropic flow equations, Chelaru, 2011, eq. 12
-        m_dot_nz = sqrt(k_C*(2/(k_C+1))^((k_C+1)/(k_C-1)))*mi.A_t*sqrt(P_C*rho_C);
-        if m_dot_nz < 0; m_dot_nz = 0; end % No backflow allowed
-        % Velocity ratio trascendental equation iterative solution,
-        % Chelaru, 2011, eq. 35
-        lambda = fzero(@(lambda) VelocityFunction(lambda,k_C, AtAe),2); % Velocity ratio
-        % Thrust, Chelaru, 2011, eq. 42
-        F = mi.A_e*mi.env.P*(sigma_c*(P_C/mi.env.P)*AtAe*k_C*(2/(k_C+1))^(1/(k_C+1))*lambda-1);
-        % F = 20;
-        if F < 0; F = 0; end
-    end
+function [m_dot_nz, F] = Nozzle(mi, k_C, P_1, T_1)
+    R = 259.8;
+    C_F = (2*k_C/(k_C-1)*(2/(k_C+1))^((k_C+1)/(k_C-1))*(1-(mi.env.P/P_1)^((k_C-1)/k_C)))^0.5;
+    F = C_F*mi.A_t*P_1;
+    m_dot_nz = mi.A_t*P_1*k_C*((2/(k_C+1))^((k_C+1)/(k_C-1)))^0.5/(k_C*R*T_1)^0.5;
 end
